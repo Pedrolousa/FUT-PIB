@@ -1,0 +1,115 @@
+FUT PIB — PUBLICAÇÃO GRATUITA NO RENDER + SUPABASE
+==================================================
+
+ESTA VERSÃO JÁ ESTÁ ADAPTADA PARA:
+
+- continuar rodando localmente com SQL Server Express;
+- usar PostgreSQL do Supabase quando publicada;
+- ser construída pelo Render usando Docker;
+- criar as tabelas automaticamente no primeiro acesso;
+- criar automaticamente o administrador inicial;
+- manter cadastro, aprovação, avaliações e sorteio.
+
+IMPORTANTE
+----------
+
+Não coloque no GitHub:
+- senha do Supabase;
+- DATABASE_URL;
+- ADMIN_PASSWORD;
+- qualquer arquivo .env com dados reais.
+
+PASSO 1 — ATUALIZAR O REPOSITÓRIO GITHUB
+----------------------------------------
+
+Você já possui o repositório:
+https://github.com/Pedrolousa/FUT-PIB
+
+1. Feche a execução do site no Visual Studio.
+2. Extraia este ZIP.
+3. Copie TODO o conteúdo desta pasta.
+4. Cole dentro da pasta do projeto que já está ligada ao GitHub.
+5. Confirme a substituição dos arquivos.
+6. Abra novamente FutPib.csproj no Visual Studio.
+7. Compile uma vez para o Visual Studio restaurar o pacote PostgreSQL.
+8. Execute o arquivo ENVIAR-PARA-GITHUB.bat.
+9. Confira no GitHub se aparecem:
+   - Dockerfile
+   - render.yaml
+   - .dockerignore
+
+PASSO 2 — PEGAR A CONEXÃO NO SUPABASE
+-------------------------------------
+
+1. Abra o projeto fut-pib no Supabase.
+2. Clique no botão Connect.
+3. Procure a conexão PostgreSQL do tipo Session Pooler.
+4. Copie a connection string.
+5. Substitua [YOUR-PASSWORD] pela senha do banco.
+6. Guarde em local privado.
+
+Pode ser uma URL semelhante a:
+postgresql://usuario:SENHA@servidor:5432/postgres
+
+A senha deve estar corretamente codificada quando contiver símbolos.
+O próprio Supabase informa isso na tela de conexão.
+
+PASSO 3 — CRIAR O SITE NO RENDER
+--------------------------------
+
+1. Entre no Render e faça login com o GitHub.
+2. Escolha New +.
+3. Escolha Blueprint.
+4. Selecione o repositório Pedrolousa/FUT-PIB.
+5. O Render encontrará o arquivo render.yaml.
+6. Confirme a criação do serviço gratuito.
+
+O Render solicitará as variáveis secretas:
+
+DATABASE_URL
+Cole a connection string do Supabase.
+
+ADMIN_PASSWORD
+Crie a senha que você usará para entrar como administrador.
+Exemplo de formato: uma senha forte com letras, números e símbolos.
+
+GROUP_CODE
+Crie o código que os jogadores deverão informar ao criar a conta.
+
+ADMIN_USERNAME já está definido como:
+admin
+
+7. Inicie a implantação.
+8. Aguarde o status Live.
+9. Abra o endereço terminado em onrender.com.
+
+PRIMEIRO LOGIN ONLINE
+---------------------
+
+Usuário:
+admin
+
+Senha:
+o valor que você colocou em ADMIN_PASSWORD no Render.
+
+CADASTRO DOS JOGADORES
+----------------------
+
+O jogador deverá usar o valor que você colocou em GROUP_CODE.
+Depois, o administrador entra e aprova o cadastro.
+
+OBSERVAÇÃO SOBRE O PLANO GRATUITO
+---------------------------------
+
+O serviço gratuito pode ficar inativo após algum tempo sem acesso.
+O primeiro acesso depois desse período pode demorar um pouco.
+Os acessos seguintes ficam normais enquanto o serviço está ativo.
+
+CASO APAREÇA ERRO NA PUBLICAÇÃO
+-------------------------------
+
+Abra no Render:
+Logs
+
+Copie apenas as linhas do erro.
+Nunca envie a connection string completa nem senhas.

@@ -33,7 +33,9 @@ public class AccountController : Controller
     {
         model.Username = model.Username.Trim().ToLowerInvariant();
 
-        if (model.GroupCode != _configuration["FutPib:GroupCode"])
+        var expectedGroupCode = Environment.GetEnvironmentVariable("GROUP_CODE") ?? _configuration["FutPib:GroupCode"];
+
+        if (model.GroupCode != expectedGroupCode)
             ModelState.AddModelError(nameof(model.GroupCode), "Código do grupo inválido.");
 
         if (await _db.Users.AnyAsync(u => u.Username == model.Username))
