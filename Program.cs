@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -49,7 +51,33 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     // Cria as tabelas automaticamente no SQL Express ou Supabase.
-    db.Database.EnsureCreated();
+    if (!string.IsNullOrWhiteSpace(databaseUrl))
+    {
+        var connection = db.Database.GetDbConnection();
+
+        await connection.OpenAsync();
+
+        using var command = connection.CreateCommand();
+        command.CommandText =
+            "SELECT to_regclass('public.\"Users\"') IS NOT NULL;";
+
+        var result = await command.ExecuteScalarAsync();
+        var usersTableExists = result is bool exists && exists;
+
+        await connection.CloseAsync();
+
+        if (!usersTableExists)
+        {
+            var databaseCreator =
+                db.GetService<IRelationalDatabaseCreator>();
+
+            await databaseCreator.CreateTablesAsync();
+        }
+    }
+    else
+    {
+        db.Database.EnsureCreated();
+    }
 
     var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher<AppUser>>();
     var adminUsername = Environment.GetEnvironmentVariable("ADMIN_USERNAME") ?? "admin";
