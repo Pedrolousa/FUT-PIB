@@ -1,0 +1,64 @@
+@{
+    ViewData["Title"] = "Início";
+}
+
+<section class="hero">
+    <div>
+        <span class="eyebrow">Futebol organizado</span>
+        <h1>Times equilibrados sem discussão.</h1>
+        <p>
+            O administrador escolhe quem joga na semana, os jogadores avaliam as habilidades
+            e o FUT PIB monta os times tentando deixar tudo o mais justo possível.
+        </p>
+
+        <div class="hero-actions">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <a class="button primary"
+                   asp-controller="@(User.IsInRole(nameof(UserRole.Admin)) ? "Admin" : "Player")"
+                   asp-action="Index">Abrir painel</a>
+            }
+            else
+            {
+                <a class="button primary" asp-controller="Account" asp-action="Register">Criar minha conta</a>
+                <a class="button secondary" asp-controller="Account" asp-action="Login">Já tenho conta</a>
+            }
+        </div>
+    </div>
+
+    <div class="hero-card">
+        <div class="mini-team">
+            <strong>TIME 1</strong>
+            <span>Goleiro equilibrado</span>
+            <span>Defesa distribuída</span>
+            <span>Ataque balanceado</span>
+            <b>Nota 18,7</b>
+        </div>
+        <div class="versus">X</div>
+        <div class="mini-team">
+            <strong>TIME 2</strong>
+            <span>Goleiro equilibrado</span>
+            <span>Defesa distribuída</span>
+            <span>Ataque balanceado</span>
+            <b>Nota 18,6</b>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <article>
+        <span>1</span>
+        <h3>Cadastro controlado</h3>
+        <p>O jogador usa o código do grupo e aguarda sua aprovação.</p>
+    </article>
+    <article>
+        <span>2</span>
+        <h3>Avaliações anônimas</h3>
+        <p>Cada jogador avalia os demais, sem ver quem deu cada nota.</p>
+    </article>
+    <article>
+        <span>3</span>
+        <h3>Sorteio inteligente</h3>
+        <p>O sistema considera as notas, posições e goleiros.</p>
+    </article>
+</section>

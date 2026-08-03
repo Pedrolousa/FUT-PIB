@@ -1,0 +1,68 @@
+@model List<AppUser>
+@using FutPib.Models
+@{
+    ViewData["Title"] = "Área do jogador";
+    var ratedIds = ViewBag.RatedIds as HashSet<int> ?? new();
+    var draw = ViewBag.LatestDraw as TeamDraw;
+}
+
+<div class="page-header">
+    <div>
+        <span class="eyebrow">Área do jogador</span>
+        <h1>Avalie a resenha</h1>
+        <p>As avaliações são anônimas para os outros jogadores.</p>
+    </div>
+</div>
+
+@if (draw is not null)
+{
+    <section class="panel">
+        <div class="panel-title">
+            <div>
+                <h2>Últimos times sorteados</h2>
+                <p>@draw.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+            </div>
+        </div>
+
+        <div class="compact-teams">
+            @foreach (var group in draw.Players.GroupBy(p => p.TeamNumber).OrderBy(g => g.Key))
+            {
+                <article>
+                    <h3>TIME @group.Key</h3>
+                    @foreach (var player in group.OrderBy(p => p.User!.PrimaryPosition))
+                    {
+                        <span>@player.User!.Nickname <small>@player.User.PrimaryPosition</small></span>
+                    }
+                </article>
+            }
+        </div>
+    </section>
+}
+
+<section class="panel">
+    <div class="panel-title">
+        <div>
+            <h2>Jogadores</h2>
+            <p>Dê notas de 1 a 5 para cada habilidade.</p>
+        </div>
+    </div>
+
+    <div class="cards-grid">
+        @foreach (var player in Model)
+        {
+            var rated = ratedIds.Contains(player.Id);
+            <article class="player-card">
+                <div class="avatar">@player.Nickname[..1].ToUpper()</div>
+                <div class="grow">
+                    <h3>@player.Nickname</h3>
+                    <p>@player.PrimaryPosition</p>
+                    <small>@(rated ? "Avaliação já enviada" : "Ainda não avaliado")</small>
+                </div>
+                <a class="button @(rated ? "secondary" : "primary")"
+                   asp-action="Rate" asp-route-id="@player.Id">
+                    @(rated ? "Editar nota" : "Avaliar")
+                </a>
+            </article>
+        }
+    </div>
+</section>

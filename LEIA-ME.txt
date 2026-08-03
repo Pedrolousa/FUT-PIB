@@ -1,0 +1,58 @@
+FUT PIB — INSTRUÇÕES PARA ABRIR
+
+TECNOLOGIAS:
+- ASP.NET Core MVC (.NET 8)
+- SQL Server Express
+- Entity Framework Core
+- Login por cookie com senha protegida por hash
+
+LOGIN INICIAL DO ADMINISTRADOR:
+Usuário: admin
+Senha: FutPib@2026
+
+CÓDIGO INICIAL PARA CADASTRO DOS JOGADORES:
+FUTPIB2026
+
+IMPORTANTE:
+Troque a senha do administrador e o código do grupo antes de publicar o site.
+
+COMO ABRIR NO VISUAL STUDIO:
+
+1. Extraia a pasta FUT-PIB.
+2. Abra o arquivo FutPib.csproj no Visual Studio.
+3. Aguarde o Visual Studio restaurar os pacotes.
+4. Confirme que o SQL Server Express está iniciado.
+5. Pressione F5 ou clique no botão verde de execução.
+6. O banco FutPibDb será criado automaticamente.
+7. Entre com o usuário admin e a senha FutPib@2026.
+
+CASO O SQL SERVER TENHA OUTRO NOME:
+
+Abra o arquivo appsettings.json.
+
+A conexão atual é:
+Server=.\SQLEXPRESS;Database=FutPibDb;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=true
+
+Se você usa LocalDB, troque por:
+Server=(localdb)\MSSQLLocalDB;Database=FutPibDb;Trusted_Connection=True;TrustServerCertificate=True
+
+PARA TROCAR O CÓDIGO DO GRUPO:
+
+No appsettings.json, altere:
+"GroupCode": "FUTPIB2026"
+
+FUNCIONAMENTO:
+
+1. O jogador abre Criar conta.
+2. Preenche os dados e o código do grupo.
+3. O cadastro fica pendente.
+4. O administrador entra no painel e aprova.
+5. O jogador entra e avalia os outros jogadores.
+6. O administrador seleciona quem jogará na semana.
+7. O administrador escolhe a quantidade de times.
+8. O FUT PIB sorteia times equilibrados.
+
+OBSERVAÇÃO:
+Este projeto foi preparado sem executar a compilação neste ambiente, pois o .NET SDK
+não está instalado aqui. A estrutura foi montada para .NET 8 e deve restaurar os pacotes
+automaticamente no Visual Studio.

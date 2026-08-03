@@ -1,0 +1,25 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Entrar";
+}
+
+<div class="auth-card narrow">
+    <h1>Entrar no FUT PIB</h1>
+
+    <form asp-action="Login" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+        <label asp-for="Username"></label>
+        <input asp-for="Username" autocomplete="username" />
+
+        <label asp-for="Password"></label>
+        <input asp-for="Password" autocomplete="current-password" />
+
+        <button class="button primary full" type="submit">Entrar</button>
+    </form>
+
+    <p class="center">
+        Ainda não tem conta?
+        <a asp-action="Register">Cadastre-se</a>
+    </p>
+</div>

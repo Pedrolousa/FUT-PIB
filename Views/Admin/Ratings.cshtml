@@ -1,0 +1,28 @@
+@model List<PlayerScoreViewModel>
+@{
+    ViewData["Title"] = "Notas dos jogadores";
+}
+
+<div class="page-header">
+    <div>
+        <span class="eyebrow">Administrador</span>
+        <h1>Notas dos jogadores</h1>
+        <p>Jogadores sem avaliação começam com nota provisória 3,0.</p>
+    </div>
+</div>
+
+<div class="ranking">
+    @for (var i = 0; i < Model.OrderByDescending(x => x.Score).Count(); i++)
+    {
+        var item = Model.OrderByDescending(x => x.Score).ElementAt(i);
+        <article class="ranking-row">
+            <strong class="position-number">#@(i + 1)</strong>
+            <div class="avatar">@item.User.Nickname[..1].ToUpper()</div>
+            <div class="ranking-name">
+                <h3>@item.User.Nickname</h3>
+                <small>@item.User.PrimaryPosition • @item.RatingCount avaliações</small>
+            </div>
+            <strong class="score">@item.Score.ToString("0.00")</strong>
+        </article>
+    }
+</div>

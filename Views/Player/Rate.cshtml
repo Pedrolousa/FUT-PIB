@@ -1,0 +1,30 @@
+@model RatingViewModel
+@{
+    ViewData["Title"] = "Avaliar jogador";
+}
+
+<div class="auth-card rating-card">
+    <span class="eyebrow">Avaliação anônima</span>
+    <h1>Avaliar @Model.RatedUserName</h1>
+    <p>Escolha notas de 1 a 5. Tente ser justo para melhorar o equilíbrio dos times.</p>
+
+    <form asp-action="Rate" method="post">
+        <input asp-for="RatedUserId" type="hidden" />
+        <input asp-for="RatedUserName" type="hidden" />
+
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+        <div class="rating-grid">
+            <label>Defesa <select asp-for="Defense">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Passe <select asp-for="Passing">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Velocidade <select asp-for="Speed">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Resistência <select asp-for="Stamina">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Drible <select asp-for="Dribbling">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Finalização <select asp-for="Finishing">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Jogo coletivo <select asp-for="Teamwork">@await Html.PartialAsync("_RatingOptions")</select></label>
+            <label>Goleiro <select asp-for="Goalkeeping">@await Html.PartialAsync("_RatingOptions")</select></label>
+        </div>
+
+        <button class="button primary full" type="submit">Salvar avaliação</button>
+    </form>
+</div>

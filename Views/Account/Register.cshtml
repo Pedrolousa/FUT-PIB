@@ -1,0 +1,57 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Criar conta";
+}
+
+<div class="auth-card">
+    <h1>Criar conta</h1>
+    <p>Use o código do grupo. Depois, o administrador deverá aprovar seu cadastro.</p>
+
+    <form asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="validation"></div>
+
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" />
+        <span asp-validation-for="FullName"></span>
+
+        <label asp-for="Nickname"></label>
+        <input asp-for="Nickname" />
+        <span asp-validation-for="Nickname"></span>
+
+        <label asp-for="Username"></label>
+        <input asp-for="Username" autocomplete="username" />
+        <span asp-validation-for="Username"></span>
+
+        <div class="two-columns">
+            <div>
+                <label asp-for="PrimaryPosition"></label>
+                <select asp-for="PrimaryPosition" asp-items="Html.GetEnumSelectList<PlayerPosition>()"></select>
+            </div>
+            <div>
+                <label asp-for="SecondaryPosition"></label>
+                <select asp-for="SecondaryPosition" asp-items="Html.GetEnumSelectList<PlayerPosition>()">
+                    <option value="">Nenhuma</option>
+                </select>
+            </div>
+        </div>
+
+        <label asp-for="GroupCode"></label>
+        <input asp-for="GroupCode" />
+        <span asp-validation-for="GroupCode"></span>
+
+        <div class="two-columns">
+            <div>
+                <label asp-for="Password"></label>
+                <input asp-for="Password" autocomplete="new-password" />
+                <span asp-validation-for="Password"></span>
+            </div>
+            <div>
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" autocomplete="new-password" />
+                <span asp-validation-for="ConfirmPassword"></span>
+            </div>
+        </div>
+
+        <button class="button primary full" type="submit">Enviar cadastro</button>
+    </form>
+</div>

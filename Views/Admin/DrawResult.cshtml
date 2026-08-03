@@ -1,0 +1,42 @@
+@model List<DrawResultViewModel>
+@{
+    ViewData["Title"] = "Times sorteados";
+}
+
+<div class="page-header center-header">
+    <div>
+        <span class="eyebrow">Resultado</span>
+        <h1>Times sorteados</h1>
+        <p>Distribuição baseada nas médias e posições dos jogadores.</p>
+    </div>
+</div>
+
+<div class="teams-grid">
+    @foreach (var team in Model)
+    {
+        <section class="team-card">
+            <div class="team-header">
+                <h2>TIME @team.TeamNumber</h2>
+                <span>Nota @team.TotalScore.ToString("0.00")</span>
+            </div>
+
+            @foreach (var player in team.Players
+                .OrderBy(p => p.User.PrimaryPosition)
+                .ThenByDescending(p => p.Score))
+            {
+                <div class="team-player">
+                    <div class="avatar">@player.User.Nickname[..1].ToUpper()</div>
+                    <div>
+                        <strong>@player.User.Nickname</strong>
+                        <small>@player.User.PrimaryPosition</small>
+                    </div>
+                    <b>@player.Score.ToString("0.00")</b>
+                </div>
+            }
+        </section>
+    }
+</div>
+
+<div class="center">
+    <a class="button secondary" asp-action="Index">Voltar ao painel</a>
+</div>

@@ -1,0 +1,107 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Painel do administrador";
+}
+
+<div class="page-header">
+    <div>
+        <span class="eyebrow">Administrador</span>
+        <h1>Painel FUT PIB</h1>
+        <p>Semana iniciada em @Model.WeekReference.ToString("dd/MM/yyyy")</p>
+    </div>
+</div>
+
+@if (Model.PendingUsers.Any())
+{
+    <section class="panel">
+        <div class="panel-title">
+            <h2>Cadastros aguardando aprovação</h2>
+            <span class="badge">@Model.PendingUsers.Count</span>
+        </div>
+
+        <div class="cards-grid">
+            @foreach (var player in Model.PendingUsers)
+            {
+                <article class="player-card">
+                    <div class="avatar">@player.Nickname[..1].ToUpper()</div>
+                    <div>
+                        <h3>@player.Nickname</h3>
+                        <p>@player.FullName</p>
+                        <small>@player.PrimaryPosition</small>
+                    </div>
+                    <div class="card-actions">
+                        <form asp-action="Approve" method="post">
+                            <input type="hidden" name="id" value="@player.Id" />
+                            <button class="button success-button" type="submit">Aprovar</button>
+                        </form>
+                        <form asp-action="Reject" method="post">
+                            <input type="hidden" name="id" value="@player.Id" />
+                            <button class="button danger-button" type="submit">Recusar</button>
+                        </form>
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+}
+
+<section class="panel">
+    <div class="panel-title">
+        <div>
+            <h2>Quem joga nesta semana?</h2>
+            <p>Marque os jogadores que entrarão no sorteio.</p>
+        </div>
+        <span class="badge">@Model.ApprovedPlayers.Count jogadores</span>
+    </div>
+
+    <form asp-action="SaveSelection" method="post">
+        <input type="hidden" name="weekReference" value="@Model.WeekReference.ToString("yyyy-MM-dd")" />
+
+        <div class="selection-grid">
+            @foreach (var player in Model.ApprovedPlayers)
+            {
+                var selected = Model.SelectedPlayerIds.Contains(player.Id);
+                <label class="select-player @(selected ? "selected" : "")">
+                    <input type="checkbox" name="selectedIds" value="@player.Id" checked="@selected" />
+                    <span class="avatar">@player.Nickname[..1].ToUpper()</span>
+                    <span>
+                        <strong>@player.Nickname</strong>
+                        <small>@player.PrimaryPosition</small>
+                    </span>
+                </label>
+            }
+        </div>
+
+        <button class="button primary" type="submit">Salvar jogadores da semana</button>
+    </form>
+</section>
+
+<section class="panel draw-panel">
+    <div>
+        <h2>Gerar times equilibrados</h2>
+        <p>Salve a seleção acima e depois escolha quantos times deseja montar.</p>
+    </div>
+
+    <form asp-action="DrawTeams" method="post" class="draw-form">
+        <input type="hidden" name="weekReference" value="@Model.WeekReference.ToString("yyyy-MM-dd")" />
+        <label>
+            Quantidade de times
+            <select name="teamCount">
+                <option value="2">2 times</option>
+                <option value="3">3 times</option>
+                <option value="4">4 times</option>
+            </select>
+        </label>
+        <button class="button primary" type="submit">Sortear agora</button>
+    </form>
+</section>
+
+@section Scripts {
+<script>
+document.querySelectorAll('.select-player input').forEach(input => {
+    input.addEventListener('change', () => {
+        input.closest('.select-player').classList.toggle('selected', input.checked);
+    });
+});
+</script>
+}
